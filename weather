@@ -1,0 +1,30 @@
+import requests
+import tkinter as tk
+
+def get_weather():
+    city = city_entry.get()
+    api_key = "here should be your api key" # api key
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    data = requests.get(url).json()
+
+    if data["cod"] == 200:
+        temp = data["main"]["temp"]
+        weather = data["weather"][0]["description"]
+        result_label.config(text=f"🌡 {temp} °C\n☁ {weather}")
+    else:
+        result_label.config(text="City not found")
+
+app = tk.Tk()
+app.title("Weather App")
+app.geometry("400x200")
+
+tk.Label(app, text="Enter City").pack()
+city_entry = tk.Entry(app)
+city_entry.pack()
+
+tk.Button(app, text="Check Weather", command=get_weather).pack()
+result_label = tk.Label(app, text="")
+result_label.pack()
+
+app.mainloop()
